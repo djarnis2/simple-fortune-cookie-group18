@@ -37,6 +37,8 @@ jobs:
     permissions:
       packages: write
     steps:
+      - name: Make scripts executable 
+        run: chmod +x ci/*.sh
       - name: build docker
         run: bash ci/build-docker.sh
       - name: push docker
