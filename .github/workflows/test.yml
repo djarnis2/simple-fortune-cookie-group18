@@ -37,6 +37,8 @@ jobs:
     permissions:
       packages: write
     steps:
+      - name: Checout repo
+        uses: actions/checkout@v4
       - name: Make scripts executable 
         run: chmod +x ci/*.sh
       - name: build docker
