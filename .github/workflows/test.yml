@@ -1,7 +1,7 @@
 name: 03automation
 on: push
 env:
-  docker_username: group18
+  docker_username: ${{ github.repository_owner }}
   docker_password: ${{ secrets.GITHUB_TOKEN }}
   GIT_COMMIT: ${{ github.sha }}
 jobs:
