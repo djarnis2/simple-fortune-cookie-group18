@@ -5,7 +5,7 @@ env:
   docker_password: ${{ secrets.GITHUB_TOKEN }}
   GIT_COMMIT: ${{ github.sha }}
 jobs:
-  Build: 
+  Build-and-Test: 
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo
@@ -33,18 +33,32 @@ jobs:
           
   Docker-image:
     runs-on: ubuntu-latest
-    needs: [Build]
+    needs: [Build-and-Test]
     permissions:
+      contents: read
       packages: write
     steps:
-      - name: Checout repo
+      - name: Checkout repo
         uses: actions/checkout@v4
-      - name: Make scripts executable 
-        run: chmod +x ci/*.sh
-      - name: build docker
-        run: bash ci/build-docker.sh
-      - name: push docker
-        run: bash ci/push-docker.sh  
+      - name: Lowercase owner
+        id: lc
+        run: echo "owner=$(echo '${{ env.docker_username }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
+      - name: Login to GHCR
+        run: echo "${{ env.docker_password }}" | docker login ghcr.io -u ${{ env.docker_username }} --password-stdin
+      - name: build and push backend
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          push: true
+          tags: |
+            ghcr.io/${{ steps.lc.outputs.owner }}/simple-fortune-cookie-group18-backend:latest
+      - name: build and push frontend
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          push: true
+          tags: |
+            ghcr.io/${{ steps.lc.outputs.owner }}/simple-fortune-cookie-group18-frontend:latest
 
       
         
