@@ -59,6 +59,23 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ env.docker_username }}/simple-fortune-cookie-group18-frontend:latest
+  Kubernetes-secrets:
+    runs-on: ubuntu-latest
+    needs: [Docker-image]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
+      - name: Set up KUBECONFIG
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" | base64 -d > kubeconfig
+      
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl --kubeconfig kubeconfig apply -f backend-deployment.yaml
+          kubectl --kubeconfig kubeconfig apply -f backend-service.yaml
+          kubectl --kubeconfig kubeconfig apply -f frontend-deployment.yaml
+          kubectl --kubeconfig kubeconfig apply -f frontend-service.yaml
+      
       
         
