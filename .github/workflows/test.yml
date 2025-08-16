@@ -82,7 +82,7 @@ jobs:
 
       - name: Forward backend port
         run: |
-           kubectl port-forward deployment/backend-deployment 9000:9000
+           kubectl port-forward svc/backend-deployment 9000:9000
 
       - name: Test backend availability
         run: |
