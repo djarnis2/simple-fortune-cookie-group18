@@ -1,4 +1,4 @@
-FROM golang:1.16
+FROM golang:1.18
 WORKDIR /backend
 COPY . .
 RUN go build -o backend .
