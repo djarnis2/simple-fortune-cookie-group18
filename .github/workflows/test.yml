@@ -59,6 +59,17 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ env.docker_username }}/simple-fortune-cookie-group18-frontend:latest
+            
+  Test-application:
+    runs-on: ubuntu-latest 
+    needs: [Docker-image]
+    steps: 
+      - name: Test backend availability 
+        run: |
+          curl -s http://localhost:9000/fortunes 
+          curl -X POST http://localhost:9000/fortunes \-H "Content-Type: application/json" \-d '{"id":"test1","message":"Redis test"}'
+          curl -s http://localhost:9000/fortunes | grep "Redis test" 
+          
   Kubernetes-secrets:
     runs-on: ubuntu-latest
     needs: [Docker-image]
@@ -76,15 +87,8 @@ jobs:
           kubectl --kubeconfig kubeconfig apply -f backend-service.yaml
           kubectl --kubeconfig kubeconfig apply -f frontend-deployment.yaml
           kubectl --kubeconfig kubeconfig apply -f frontend-service.yaml
-  Test-application:
-    runs-on: ubuntu-latest 
-    needs: [Docker-image]
-    steps: 
-      - name: Test backend availability 
-        run: |
-          curl -s http://localhost:9000/fortunes 
-          curl -X POST http://localhost:9000/fortunes \-H "Content-Type: application/json" \-d '{"id":"test1","message":"Redis test"}'
-          curl -s http://localhost:9000/fortunes | grep "Redis test"
+          
+  
       
      
       
