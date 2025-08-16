@@ -15,5 +15,8 @@ spec:
         app: backend-deployment
     spec:
       containers:
-      - name: backend-container
-        image: ghcr.io/djarnis2/simple-fortune-cookie-group18-backend:latest
+        - name: backend-container
+          image: ghcr.io/djarnis2/simple-fortune-cookie-group18-backend:latest
+          env:
+            - name: REDIS_DNS
+              value: "redis:6379"
