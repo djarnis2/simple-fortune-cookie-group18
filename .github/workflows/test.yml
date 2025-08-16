@@ -88,12 +88,15 @@ jobs:
         run: |
           echo "${{ secrets.KUBECONFIG }}" | base64 -d > kubeconfig
           echo "KUBECONFIG=$PWD/kubeconfig" >> $GITHUB_ENV
-
+          
       - name: Forward backend port
         run: |
-          kubectl port-forward svc/backend-service 9000:9000 &
-          echo $! > pf.pid
-          sleep 5
+          for i in {1..10}; do
+          kubectl --kubeconfig kubeconfig get svc/backend-service && break
+          echo "Waiting for backend-service..."
+          sleep 3
+          done
+          kubectl --kubeconfig kubeconfig port-forward svc/backend-service 9000:9000
 
       - name: Test backend availability
         run: |
