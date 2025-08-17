@@ -1,5 +1,8 @@
-FROM golang:1.18
-WORKDIR /frontend
+FROM golang:1.21 AS builder
+WORKDIR /app
 COPY . .
-RUN go build -o frontend .
-CMD ["./frontend"]
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o frontend .
+
+FROM scratch
+COPY --from=builder /app/frontend /frontend
+ENTRYPOINT ["./frontend"]
