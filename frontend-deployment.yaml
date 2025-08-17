@@ -16,4 +16,4 @@ spec:
     spec:
       containers:
       - name: frontend-container
-        image: ghcr.io/djarnis2/simple-fortune-cookie-group18-frontend:latest
+        image: ghcr.io/djarnis2/simple-fortune-cookie-group18-frontend:v1
