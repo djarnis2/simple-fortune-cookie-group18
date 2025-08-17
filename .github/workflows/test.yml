@@ -73,7 +73,7 @@ jobs:
           tags: |
             ghcr.io/${{ env.docker_username }}/simple-fortune-cookie-group18-frontend:latest
 
-  Security-scan:
+  Security-scan-images:
     runs-on: ubuntu-latest
     needs: [Docker-image]  
     steps:
@@ -86,12 +86,11 @@ jobs:
 
     - name: Scan backend image
       run: |
-        ./trivy image ghcr.io/${{ env.docker_username }}/simple-fortune-cookie-group18-backend:latest
+        trivy image ghcr.io/${{ env.docker_username }}/simple-fortune-cookie-group18-backend:latest
 
     - name: Scan frontend image
       run: |
-        ./trivy image ghcr.io/${{ env.docker_username }}/simple-fortune-cookie-group18-frontend:latest
-        
+        trivy image ghcr.io/${{ env.docker_username }}/simple-fortune-cookie-group18-frontend:latest
                    
   Kubernetes-secrets-and-Deploy:
     runs-on: ubuntu-latest
