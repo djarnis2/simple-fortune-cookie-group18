@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
 	"log"
-	"sync"
 	"time"
 	"os"
 )
@@ -40,7 +39,7 @@ func init() {
 		return
 	}
 
-	datastoreDefault = datastore{m: map[string]fortune{}, RWMutex: &sync.RWMutex{}}
+	//datastoreDefault = datastore{m: map[string]fortune{}, RWMutex: &sync.RWMutex{}}
 	fmt.Printf("*** loading redis fortunes:\n")
 	for _, key := range resKeys {
 		val, err := dbLink.Do("hget", "fortunes", key)

@@ -16,7 +16,12 @@ spec:
     spec:
       containers:
         - name: backend-container
-          image: ghcr.io/djarnis2/simple-fortune-cookie-group18-backend:V1
+          image: ghcr.io/djarnis2/simple-fortune-cookie-group18-backend:V2
+          ports:
+            - name: http
+              containerPort: 9000
           env:
             - name: REDIS_DNS
               value: "redis"
+            - name: REDIS_PORT
+              value: "6379"

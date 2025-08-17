@@ -17,3 +17,10 @@ spec:
       containers:
       - name: frontend-container
         image: ghcr.io/djarnis2/simple-fortune-cookie-group18-frontend:v1
+        ports:
+          - containerPort: 8080
+        env:
+          - name: BACKEND_DNS
+            value: backend-deployment
+          - name: BACKEND_PORT
+            value: "9000"
