@@ -44,9 +44,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         DISABLE_ERRORS: "true"
 
-
-
-
   Docker-image:
     runs-on: ubuntu-latest
     needs: [Build-and-Test]
@@ -75,6 +72,26 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ env.docker_username }}/simple-fortune-cookie-group18-frontend:latest
+
+  Security-scan:
+    runs-on: ubuntu-latest
+    needs: [Docker-image]  
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Trivy
+      run: |
+        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
+
+    - name: Scan backend image
+      run: |
+        ./trivy image ghcr.io/${{ env.docker_username }}/simple-fortune-cookie-group18-backend:latest
+
+    - name: Scan frontend image
+      run: |
+        ./trivy image ghcr.io/${{ env.docker_username }}/simple-fortune-cookie-group18-frontend:latest
+        
                    
   Kubernetes-secrets-and-Deploy:
     runs-on: ubuntu-latest
