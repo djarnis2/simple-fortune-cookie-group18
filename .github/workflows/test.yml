@@ -92,11 +92,14 @@ jobs:
       - name: Forward backend port
         run: |
           for i in {1..10}; do
-          kubectl --kubeconfig kubeconfig get svc/backend-service && break
-          echo "Waiting for backend-service..."
-          sleep 3
+            kubectl --kubeconfig kubeconfig get svc/backend-deployment && break
+            echo "Waiting for backend-deployment..."
+            sleep 3
           done
-          kubectl --kubeconfig kubeconfig port-forward svc/backend-service 9000:9000
+          kubectl --kubeconfig kubeconfig get svc/backend-deployment || exit 1
+
+          kubectl --kubeconfig kubeconfig port-forward svc/backend-deployment 9000:9000 &
+          sleep 5
 
       - name: Test backend availability
         run: |
