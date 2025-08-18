@@ -22,11 +22,13 @@ jobs:
       - name: Build backend
         run: | 
           cd backend
+          go mod download
           go build 
 
       - name: Build Frontend
         run: |
           cd frontend
+          go mod download
           go build
 
       - name: Run frontend tests
