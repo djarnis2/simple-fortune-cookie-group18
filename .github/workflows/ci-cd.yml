@@ -1,4 +1,4 @@
-name: 03automation
+name: CI/CD Pipeline
 on: push
 env:
   docker_username: ${{ github.repository_owner }}
